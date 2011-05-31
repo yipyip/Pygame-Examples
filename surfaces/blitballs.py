@@ -1,22 +1,19 @@
 #!/usr/bin/env python
 
 """
-Name   : blit_pulse2.py
-URL    : http://thepythongamebook.com/en:part2:pygame:step003
-Author : yipyip
-Licence: gpl, see http://www.gnu.org/licenses/gpl.html
+Surfaces, blitting and animation
 """
 
 ####
 
-import pygame as pyg
-import random as rand
+import pygame
+import random
 
 ####
 
 def random_rgb():
     
-   return rand.randint(0, 255), rand.randint(0,255), rand.randint(0, 255)
+   return random.randint(0, 255), random.randint(0,255), random.randint(0, 255)
 
 ####
 
@@ -27,16 +24,19 @@ class PygView(object):
         """Initializing background surface for static drawing
            and screen surface for dynamic drawing 
         """
-        pyg.init()
-        pyg.display.set_caption("Press ESC to quit")
+        pygame.init()
+        pygame.display.set_caption("Press ESC to quit")
         
         self.width = width
         self.height = height
         
-        self.screen = pyg.display.set_mode((self.width, self.height), pyg.DOUBLEBUF)
-        self.background = pyg.Surface(self.screen.get_size()).convert()  
+        self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
+        self.background = pygame.Surface(self.screen.get_size()).convert()  
         # white blackground
         self.background.fill((255, 255, 255))
+
+        self.fps = fps
+        self.clock = pygame.time.Clock()
 
         self.act_surface = self.screen
         self.act_rgb = 255, 0, 0
@@ -61,8 +61,8 @@ class PygView(object):
         """Allocate surface for blitting and draw circle
         """
         rad2 = 2 * radius
-        surface = pyg.Surface((rad2, rad2))
-        pyg.draw.circle(surface, self.act_rgb, (radius, radius), radius, width)
+        surface = pygame.Surface((rad2, rad2))
+        pygame.draw.circle(surface, self.act_rgb, (radius, radius), radius, width)
         surface.set_colorkey((0, 0, 0))
         self.act_surface.blit(surface.convert_alpha(), (x, y))
 
@@ -72,18 +72,25 @@ class PygView(object):
         """
         running = True
         while running:
-            for event in pyg.event.get():
-                if event.type == pyg.QUIT:
+            self.flip()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
                     running = False 
-                elif event.type == pyg.KEYDOWN:
-                    if event.key == pyg.K_ESCAPE:
+                elif event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
                         running = False
 
             draw_dynamic()
-            pyg.display.flip()
-            self.screen.blit(self.background, (0, 0))
-            
-        pyg.quit()
+        
+        pygame.quit()
+
+
+    def flip(self):
+      
+        pygame.display.flip()
+        self.clock.tick(self.fps)
+        self.screen.blit(self.background, (0, 0))
+        
 
 ####
 

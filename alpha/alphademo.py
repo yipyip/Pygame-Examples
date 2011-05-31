@@ -1,14 +1,7 @@
 #!/usr/bin/env python
 
 """
-Alpha value Demo
-"""
-
-__doc__ =\
-"""
-USAGE: alpha <picture> 
-
-EXAMPLE: colormonster.jpg
+Alpha and colorkey demo
 """
   
 ####
@@ -79,7 +72,9 @@ class AlphaDemo(object):
            
             self.action(pygame.key.get_pressed())
            
+        pygame.quit()
 
+        
     def action(self, pressed_keys):
 
         glob_alpha = self.glob_alphas.next()

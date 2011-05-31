@@ -40,10 +40,18 @@ class PygView(object):
                     running = False 
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        running = False          
+                        running = False
+
+            self.action()
+            
         pygame.quit()
 
 
+    def action(self):
+
+        pass
+
+        
     def flip(self):
 
          pygame.display.flip()
