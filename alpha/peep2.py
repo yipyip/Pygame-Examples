@@ -55,6 +55,7 @@ class PeepDemo(object):
         self.pic_offset = offset(self.width, self.pic.get_width()),\
                           offset(self.height, self.pic.get_height())
 
+        # init stuff for circles with alpha value 
         self.center = self.width // 2, self.height // 2
         self.max_radius = min(self.width, self.height)
         self.hole_count = opts['holes']
@@ -63,7 +64,9 @@ class PeepDemo(object):
 
 
     def calc_rad_alphas(self, radius, n):
-        
+        """
+        Calculate linear radius and alpha values
+        """
         assert 0 < n < 256, "Invalid number of holes!"
 
         rad_step = radius // n
@@ -72,6 +75,9 @@ class PeepDemo(object):
              
 
     def calc_centers(self, center, pos, holes):
+        """
+        Calculate center points from center (of window) to mouse position
+        """
 
         cx, cy = center
         mx, my = pos 
@@ -108,21 +114,29 @@ class PeepDemo(object):
             
    
     def show(self):
+        """
+        Draw all
+        """
 
+        # picture on screen
         self.screen.blit(self.pic, self.pic_offset)
+        # circles on alpha surface
         for (r, a), c in zip(self.rad_alphas, self.centers):
-            #print c
             pygame.draw.circle(self.ppa_surface, (0, 0, 0, a), c, r)
 
+        # alpha surface on screen
         self.screen.blit(self.ppa_surface, (0, 0))
+        # erase alpha surface for new circles
         self.ppa_surface.fill((0, 0, 0))
         
  
     def flip(self):
-
-         pygame.display.flip()
-         self.screen.blit(self.background, (0, 0))
-         self.clock.tick(self.fps)
+        """
+        Show drawing and erase
+        """
+        pygame.display.flip()
+        self.screen.blit(self.background, (0, 0))
+        self.clock.tick(self.fps)
             
 ####
 
