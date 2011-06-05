@@ -102,12 +102,16 @@ class PeepDemo(object):
                     if event.key == pygame.K_ESCAPE:
                         mainloop = False
                 elif event.type == pygame.MOUSEMOTION:
-                    self.calc_centers(self.center, pygame.mouse.get_pos(), self.hole_count)
+                    self.calc_centers(self.center, pygame.mouse.get_pos(),
+                                      self.hole_count)
                 elif event.type == pygame.MOUSEBUTTONDOWN:
+                    # check mouse wheel
                     if event.button in (4, 5):
-                        self.hole_count = check(self.hole_count+ [-1, 1][event.button-4], 2, 64)  
+                        self.hole_count = check(self.hole_count+ [-1, 1][event.button-4],
+                                                2, 64)  
                         self.calc_rad_alphas(self.max_radius, self.hole_count)
-                        self.calc_centers(self.center, pygame.mouse.get_pos(), self.hole_count)
+                        self.calc_centers(self.center, pygame.mouse.get_pos(),
+                                          self.hole_count)
                         
             self.show()
         pygame.quit()
@@ -143,7 +147,7 @@ class PeepDemo(object):
 opts = {'width': 800,
         'height': 600,
         'backcol': (255, 0, 0),
-        'fps': 10,
+        'fps': 100,
         'fontsize': 18,
         'pic': 'ente.jpg',
         'holes': 7}
