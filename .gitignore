@@ -10,9 +10,9 @@
 *.log
 
 #### pics
-*.gif
-*.png
-*.jpg
+#*.gif
+#*.png
+#*.jpg
 
 #### archives
 *.zip
