@@ -1,2 +1,20 @@
-####
+#### emacs
 *~
+\#*\#
+
+#### python
+*.py[co]
+
+#### misc
+*.bak
+*.log
+
+#### pics
+*.gif
+*.png
+*.jpg
+
+#### archives
+*.zip
+*.tar.gz
+
