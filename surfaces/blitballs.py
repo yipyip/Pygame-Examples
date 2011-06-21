@@ -198,12 +198,12 @@ def main(width):
 
     view.draw_dynamic()
     ball1 = Ball(15, 130, 100, 1, 0, (255, 0, 0))
-    ball2 = Ball(25, 200, 80, 2, 0, (0, 255, 155))
+    ball2 = Ball(25, 200, 120, 2, 0, (0, 255, 155))
     ball3 = Ball(20, 220, 110, 1, 1, (100, 55, 155))
     ball4 = Ball(20, 400, 70, 3, 0, (250, 100, 255))
     ball5 = Ball(90, 390, 70, 0, 1, (250, 100, 255), 1)
 
-    loopfunc = action((ball1, ball2, ball4, ball5), width, view)
+    loopfunc = action((ball1, ball2, ball5, ball4), width, view)
     view.run(loopfunc)
 
 ####
