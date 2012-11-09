@@ -14,36 +14,36 @@ PI2 = math.pi * 2
 
 ####
 
-def make_alpha_complex(delta=DELTA):
+def make_alpha_z(delta=DELTA):
 
     steps = PI2 / delta
 
-    def atc(alpha):
+    def atz(alpha):
 
         return complex(math.cos(alpha * steps), math.sin(alpha * steps))
 
-    return atc
+    return atz
 
 ####
 
-alpha_to_complex = make_alpha_complex()
+alpha_to_z = make_alpha_z()
 
 ####
 
-def get_angle(pos, alpha, goal_pos):
+def get_delta_angle(pos, alpha, goal_pos):
 
-    zang = alpha_to_complex(alpha)
+    zang = alpha_to_z(alpha)
     zgoal = complex(goal_pos[0] - pos[0], goal_pos[1] - pos[1])
 
-    # fuer atan2() muss zgoal nicht normiert werden
+    # no norm for atan2()
     try:
-        zgoal = (zgoal / zang)   # / abs(zgoal)) / zang
+        zturn = (zgoal / zang)
     except ZeroDivisionError:
         return 0
 
-    angle = math.atan2(zgoal.imag, zgoal.real)
+    angle = math.atan2(zturn.imag, zturn.real)
     if angle < 0:
-        angle = PI2 - angle
+        angle = PI2 + angle
 
     return int(DELTA * angle / PI2)
 
@@ -76,17 +76,17 @@ def distance2(p0, p1):
 class PygView(object):
 
 
-    def __init__(self, controller, width, height, fps, backcol=(250, 250, 250)):
+    def __init__(self, controller, conf):
 
         self.controller = controller
-        self.width = width
-        self.height = height
-        self.backcol = backcol
-        self.fps = fps
+        self.width = conf['width']
+        self.height = conf['height']
+        self.backcol = conf['backcol']
+        self.fps = conf['fps']
         self.quit_keys = pyg.K_ESCAPE, pyg.K_q
 
         pyg.init()
-        self.canvas = pyg.display.set_mode((width, height), pyg.DOUBLEBUF)
+        self.canvas = pyg.display.set_mode((self.width, self.height), pyg.DOUBLEBUF)
         pyg.display.set_caption("Press Esc to exit")
         self.clock = pyg.time.Clock()
 
@@ -146,26 +146,26 @@ class PygView(object):
 
 class Shape(object):
 
-    __slots__ = ['coords', 'act_coords', 'color', 'pos', 'alpha']
 
     def __init__(self, coords, color):
 
         self.coords = coords
         self.act_coords = list(coords[:])
         self.color = color
-        self.pos = (0.0, 0.0)
-        self.alpha = 0.0
+        self.pos = 0.0, 0.0
+        self.alpha = 0
+        self.dxy = 0.0, 0.0
 
 
     def translate_abs(self, tx, ty):
 
-        self.pos = tx, ty
+        self.pos = int(tx), int(ty)
 
 
     def translate_rel(self, tx, ty):
 
         x, y = self.pos
-        self.pos = x + tx, y + ty
+        self.pos = int(x + tx), int(y + ty)
 
 
     def rotate_abs(self, alpha):
@@ -175,12 +175,13 @@ class Shape(object):
 
     def rotate_rel(self, alpha):
 
-        self.alpha += alpha
+        print "turnrel", alpha
+        self.alpha = (int(self.alpha + alpha)) % DELTA
 
 
     def draw(self, device, color=None):
 
-        alpha_z = alpha_to_complex(self.alpha)
+        alpha_z = alpha_to_z(self.alpha)
         rot_pts = [complex(*pt) * alpha_z for pt in self.coords]
         tx, ty = self.pos
         coords = [(x + tx, y + ty) for x, y in [(z.real, z.imag) for z in rot_pts]]
@@ -193,6 +194,11 @@ class Shape(object):
 class Goal(Shape):
 
 
+    def __init__(self, coords, conf):
+
+        super(Goal, self).__init__(coords, conf['goal_col'])
+
+
     def random_trans(self, min_width, min_height, max_width, max_height):
 
         tx, ty = rand.randint(min_width, max_width), rand.randint(min_height, max_height)
@@ -201,18 +207,19 @@ class Goal(Shape):
 ####
 
 class Robot(Shape):
+    """The Goal Chaser"""
 
-    __slots__ = ['state', 'ang_step', 'ang_eps', 'move_step', 'move_eps', 'dx', 'dy']
+    def __init__(self, coords, conf):
 
-    def __init__(self, coords, color, speed,
-                 ang_step=2, ang_eps=2, move_step=1, move_eps=1):
-
-        Shape.__init__(self, coords, color)
+        super(Robot, self).__init__(coords, conf['robot_col'])
         self.state = 'orientating'
-        self.ang_step = ang_step * speed
-        self.ang_eps = ang_eps * (speed * dt + 1)
-        self.move_step = move_step * speed
-        self.move_eps = move_eps * (speed * dt + 1)
+        speed = conf['speed']
+        dt = conf['dt']
+
+        self.ang_step = conf['ang_step'] * speed
+        self.ang_eps = conf['ang_eps'] * (speed * dt + 1)
+        self.move_step = conf['move_step'] * speed
+        self.move_eps = conf['move_eps'] * (speed * dt + 1)
 
 
     def reset(self):
@@ -222,16 +229,22 @@ class Robot(Shape):
 
     def orientate(self, dt, goal_pos):
 
+        print self.alpha, self.pos, self.state
         if self.state in ('goal reached', 'moving'):
             return
 
         if self.state == 'orientating':
-            ang = get_angle(self.pos, self.alpha, goal_pos)
-            if abs(ang) < self.ang_eps:
+            ang = get_delta_angle(self.pos, self.alpha, goal_pos)
+            ang_eps = self.ang_eps
+            if ang < ang_eps or (DELTA - ang) < ang_eps:
                 self.state = 'orientation ok'
             else:
-                # hier ist der Knackpunkt!
-                self.rotate_rel((-dt * self.ang_step, dt * self.ang_step)[ang < DELTA2])
+                # !!!
+                if ang < DELTA2:
+                    turn = dt * self.ang_step
+                else:
+                    turn = -dt * self.ang_step
+                self.rotate_rel(turn)
 
 
     def move(self, dt, goal_pos):
@@ -241,40 +254,49 @@ class Robot(Shape):
 
         if self.state == 'orientation ok':
             self.state = 'moving'
-            x, y = dirvec2(self.pos, goal_pos)
-            self.dx, self.dy = dt * x * self.move_step, dt * y * self.move_step
+            self.old_distance = distance2(self.pos, goal_pos)
+            zdirect = alpha_to_z(self.alpha)
+            x, y = zdirect.real, zdirect.imag
+            self.dxy = dt * x * self.move_step, dt * y * self.move_step
 
         if self.state == 'moving':
-            self.translate_rel(self.dx, self.dy)
+            self.translate_rel(*self.dxy)
             if distance2(goal_pos, self.pos) < self.move_eps:
                 self.state = 'goal reached'
+            else:
+                dist = distance2(self.pos, goal_pos)
+                if dist > self.old_distance:
+                    self.state = 'orientating'
+                else:
+                    self.old_distance = dist
 
 ####
 
-class Controller(object):
+class Simulation(object):
+    """Model and Controller as one Class"""
+
+    def __init__(self, view, conf):
 
 
-    def __init__(self, view, width, height, dt, speed, fps=200):
+        self.width = conf['width']
+        self.height = conf['height']
+        self.area = map(int, (self.width * 0.1, self.height * 0.1,
+                               self.width * 0.9, self.height * 0.9))
+        self.view = view(self, conf)
 
-        self.width = width
-        self.height = height
-        self.areal = map(int, (width * 0.1, height * 0.1, width * 0.9, height * 0.9))
-        self.view = view(self, width, height, fps)
-        self.goal = Goal(((10, 0), (0, 10), (-10, 0), (0, -10)), (255, 0, 0))
-        self.robot = Robot(((20, 0), (-20, 20), (0, 0), (-20, -20)), (0, 99, 199), speed)
+        self.goal = Goal(((10, 0), (0, 10), (-10, 0), (0, -10)), conf)
+        self.robot = Robot(((20, 0), (-20, 20), (0, 0), (-20, -20)), conf)
 
-        self.goal.random_trans(*self.areal)
-        self.robot.translate_abs(width // 2, height // 2)
+        self.goal.random_trans(*self.area)
+        self.robot.translate_abs(self.width // 2, self.height // 2)
 
-        self.dtimer = DeltaTimer(dt)
-        #self.fps = fps
-        #self.dt = dt
+        self.dtimer = DeltaTimer(conf['dt'])
 
 
     def process(self):
 
         if self.robot.state == 'goal reached':
-            self.goal.random_trans(*self.areal)
+            self.goal.random_trans(*self.area)
             self.robot.reset()
 
         self.goal.draw(self.view)
@@ -318,12 +340,21 @@ class DeltaTimer(object):
 
 ####
 
+CONFIG = {'width': 800,
+          'height': 600,
+          'backcol': (250, 250, 250),
+          'robot_col': (0, 99, 199),
+          'goal_col': (255, 0, 0),
+          'fps': 200,   # how often a sample of the simulation is rendered
+          'speed': 300, # the robot's speedfactor
+          'dt': 0.0051,  # step for mathematical calculation of movement (smoothness)
+          'ang_step': 4,
+          'ang_eps': 19,
+          'move_step': 4,
+          'move_eps': 4}
+
+####
+
 if __name__ == '__main__':
 
-    # how often a sample of the simulation is rendered
-    FPS = 600
-    # the robot's speedfactor
-    SPEED = 200
-    # step for mathematical calculation of movement
-    dt = 0.002
-    Controller(PygView, 800, 600, dt, SPEED, FPS).run()
+    Simulation(PygView, CONFIG).run()
