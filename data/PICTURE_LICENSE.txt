@@ -1,0 +1,6 @@
+Copyright (c) 2012 Dirk Ketturkat
+
+The Pictures in this directory are not covered by the 
+license published in LICENSE.txt. You are only allowed 
+to use  these pictures to refer to this project, not to 
+derivate work or other products.
