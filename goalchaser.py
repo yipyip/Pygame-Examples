@@ -177,7 +177,6 @@ class Shape(object):
 
     def rotate_rel(self, alpha):
 
-        print "turnrel", alpha
         self.alpha = (int(self.alpha + alpha + 0.5)) % DELTA
 
 
@@ -223,7 +222,6 @@ class Robot(Shape):
         self.move_step = conf['move_step'] * speed
         self.move_eps = conf['move_eps'] * (speed * dt + 1)
 
-        print self.ang_eps, self.move_eps
 
     def reset(self):
 
@@ -232,7 +230,6 @@ class Robot(Shape):
 
     def orientate(self, dt, goal_pos):
 
-        print self.alpha, self.pos, self.state
         if self.state in ('goal reached', 'moving'):
             return
 
@@ -349,12 +346,12 @@ CONFIG = {'width': 800,
           'robot_col': (0, 99, 199),
           'goal_col': (255, 0, 0),
           'fps': 200,     # how often a sample of the simulation is rendered
-          'speed': 100,   # the robot's speedfactor
-          'dt': 0.0051,   # step for mathematical calculation of movement (smoothness)
+          'speed': 210,   # the robot's speedfactor
+          'dt': 0.005,   # step for mathematical calculation of movement (smoothness)
           'ang_step': 4,  # DELTA space
-          'ang_eps': 3,   # DELTA space
+          'ang_eps': 2,   # DELTA space (start orientation)
           'move_step': 4, # screen space
-          'move_eps': 8}  # screen space
+          'move_eps': 7}  # screen space (goal proximity)
 
 ####
 
