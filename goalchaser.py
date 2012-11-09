@@ -46,7 +46,7 @@ def get_delta_angle(pos, alpha, goal_pos):
     if angle < 0:
         angle = PI2 + angle
 
-    # in DELTA space 
+    # in DELTA space
     return int(DELTA * angle / PI2)
 
 ####
@@ -261,14 +261,13 @@ class Robot(Shape):
 
         if self.state == 'moving':
             self.translate_rel(*self.dxy)
-            if distance2(goal_pos, self.pos) < self.move_eps:
+            dist = distance2(self.pos, goal_pos)
+            if dist < self.move_eps:
                 self.state = 'goal reached'
+            elif dist > self.old_distance:
+                self.state = 'orientating'
             else:
-                dist = distance2(self.pos, goal_pos)
-                if dist > self.old_distance:
-                    self.state = 'orientating'
-                else:
-                    self.old_distance = dist
+                self.old_distance = dist
 
 ####
 
