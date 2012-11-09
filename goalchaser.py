@@ -170,11 +170,6 @@ class Shape(object):
         self.pos = x + tx, y + ty
 
 
-    def rotate_abs(self, alpha):
-
-        self.alpha = alpha
-
-
     def rotate_rel(self, alpha):
 
         self.alpha = (int(self.alpha + alpha + 0.5)) % DELTA
