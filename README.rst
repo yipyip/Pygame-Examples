@@ -1,7 +1,7 @@
 Pygame Examples
 ===============
 
-Some examples with Pygame.
+Some examples with Pygame. 
 
 
 Installation
@@ -9,7 +9,7 @@ Installation
 
 Dependencies: 
 
-* Python2.6+ (tested with Python2.6, should work with Python 2.7 too)
+* Python2.6+ (tested with Python 2.6, should work with Python 2.7 too)
 * Pygame
 
 Download and unpack this Repository. Enter ::
