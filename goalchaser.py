@@ -346,10 +346,10 @@ CONFIG = {'width': 800,
           'robot_col': (0, 99, 199),
           'goal_col': (255, 0, 0),
           'fps': 200,     # how often a sample of the simulation is rendered
-          'speed': 210,   # the robot's speedfactor
+          'speed': 300,   # the robot's speedfactor
           'dt': 0.005,   # step for mathematical calculation of movement (smoothness)
           'ang_step': 4,  # DELTA space
-          'ang_eps': 2,   # DELTA space (start orientation)
+          'ang_eps': 3,   # DELTA space (start orientation)
           'move_step': 4, # screen space
           'move_eps': 7}  # screen space (goal proximity)
 
