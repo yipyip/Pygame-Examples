@@ -1,7 +1,7 @@
 Pygame Examples
 ===============
 
-Some easy examples with Pygame.
+Some examples with Pygame.
 
 
 Installation
