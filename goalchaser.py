@@ -38,7 +38,7 @@ def get_delta_angle(pos, alpha, goal_pos):
     alpha_direct = alpha_to_z(alpha)
     goal_direct = complex(goal_pos[0] - pos[0], goal_pos[1] - pos[1])
 
-    # no need for normalizing for atan2()
+    # no need to normalize for atan2()
     try:
         zturn = (goal_direct / alpha_direct)
     except ZeroDivisionError:
