@@ -225,14 +225,14 @@ class Robot(Shape):
 
     def orientate(self, dt, goal_pos):
 
-        if self.state in ('goal reached', 'moving'):
+        if self.state in ('goal', 'moving'):
             return
 
         if self.state == 'orientating':
             ang = get_delta_angle(self.pos, self.alpha, goal_pos)
             ang_eps = self.ang_eps
             if ang < ang_eps or (DELTA - ang) < ang_eps:
-                self.state = 'orientation ok'
+                self.state = 'orientated'
             else:
                 # !!!
                 if ang < DELTA2:
@@ -244,10 +244,10 @@ class Robot(Shape):
 
     def move(self, dt, goal_pos):
 
-        if self.state in ('goal reached', 'orientating'):
+        if self.state in ('goal', 'orientating'):
             return
 
-        if self.state == 'orientation ok':
+        if self.state == 'orientated':
             self.state = 'moving'
             self.old_distance = distance2(self.pos, goal_pos)
             zdirect = alpha_to_z(self.alpha)
@@ -258,11 +258,16 @@ class Robot(Shape):
             self.translate_rel(*self.dxy)
             dist = distance2(self.pos, goal_pos)
             if dist < self.move_eps:
-                self.state = 'goal reached'
+                self.state = 'goal'
             elif dist > self.old_distance:
                 self.state = 'orientating'
             else:
                 self.old_distance = dist
+
+
+    def __repr__(self):
+
+        return "{0} {1} {2}".format(self.pos, self.alpha, self.state)
 
 ####
 
@@ -289,7 +294,7 @@ class Simulation(object):
 
     def process(self):
 
-        if self.robot.state == 'goal reached':
+        if self.robot.state == 'goal':
             self.goal.random_trans(*self.area)
             self.robot.reset()
 
@@ -297,6 +302,7 @@ class Simulation(object):
         self.dtimer += self.view.frame_duration_secs
         self.dtimer.integrate(self.transform, self.goal.pos)
         self.robot.draw(self.view)
+        #print self.robot
 
 
     def transform(self, dt, pos):
@@ -340,12 +346,12 @@ CONFIG = {'width': 800,
           'robot_col': (0, 99, 199),
           'goal_col': (255, 0, 0),
           'fps': 200,     # how often a sample of the simulation is rendered
-          'speed': 300,   # the robot's speedfactor
-          'dt': 0.005,   # step for mathematical calculation of movement (smoothness)
-          'ang_step': 4,  # DELTA space
-          'ang_eps': 3,   # DELTA space (start orientation)
+          'speed': 200,   # the robot's speedfactor
+          'dt': 0.001,   # samples per second
+          'ang_step': 8,  # DELTA space
+          'ang_eps': 4,   # DELTA space (start orientation)
           'move_step': 4, # screen space
-          'move_eps': 7}  # screen space (goal proximity)
+          'move_eps': 8}  # screen space (goal proximity)
 
 ####
 
