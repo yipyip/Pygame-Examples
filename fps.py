@@ -1,8 +1,7 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-"""
-Display framerate and playtime
-"""
+"""Display framerate and playtime."""
 
 ####
 
@@ -12,7 +11,7 @@ import pygame
 
 class PygView(object):
 
-  
+
     def __init__(self, width=800, height=600, fps=50):
         """Initialize pygame, window, background, font,...
         """
@@ -22,7 +21,7 @@ class PygView(object):
         self.height = width // 4
         self.fps = fps
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
-        self.background = pygame.Surface(self.screen.get_size()).convert()  
+        self.background = pygame.Surface(self.screen.get_size()).convert()
         self.clock = pygame.time.Clock()
         self.playtime = 0.0
         self.font = pygame.font.SysFont('mono', self.height // 7, bold=True)
@@ -34,7 +33,7 @@ class PygView(object):
         while running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False 
+                    running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
@@ -45,16 +44,16 @@ class PygView(object):
                            (self.clock.get_fps(), " "*5, self.playtime))
 
             self.flip()
-            
+
         pygame.quit()
 
 
     def flip(self):
-      
+
         pygame.display.flip()
         self.clock.tick(self.fps)
-        self.screen.blit(self.background, (0, 0))  
-        
+        self.screen.blit(self.background, (0, 0))
+
 
     def draw_text(self, text):
         """Center text in window."""
@@ -65,5 +64,5 @@ class PygView(object):
 ####
 
 if __name__ == '__main__':
-    
+
     PygView().run()

@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Code Skeleton for Pygame Examples
-"""
+Code skeleton for Pygame examples."""
 
 ####
 

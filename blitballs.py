@@ -1,8 +1,7 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-"""
-Surfaces, blitting and animation
-"""
+"""Surfaces, blitting and animation."""
 
 ####
 
@@ -12,26 +11,26 @@ import random
 ####
 
 def random_rgb():
-    
+
    return random.randint(0, 255), random.randint(0,255), random.randint(0, 255)
 
 ####
 
 class PygView(object):
 
-  
+
     def __init__(self, width=800, height=600, fps=50):
         """Initializing background surface for static drawing
-           and screen surface for dynamic drawing 
+           and screen surface for dynamic drawing
         """
         pygame.init()
         pygame.display.set_caption("Press ESC to quit")
-        
+
         self.width = width
         self.height = height
-        
+
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
-        self.background = pygame.Surface(self.screen.get_size()).convert()  
+        self.background = pygame.Surface(self.screen.get_size()).convert()
         # white blackground
         self.background.fill((255, 255, 255))
 
@@ -41,7 +40,7 @@ class PygView(object):
         self.act_surface = self.screen
         self.act_rgb = 255, 0, 0
 
-        
+
     def draw_static(self):
 
         self.act_surface = self.background
@@ -56,7 +55,7 @@ class PygView(object):
 
         self.act_rgb = rgb
 
-        
+
     def circle(self, x, y, radius, width):
         """Allocate surface for blitting and draw circle."""
         rad2 = 2 * radius
@@ -73,22 +72,22 @@ class PygView(object):
             self.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False 
+                    running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
 
             draw_dynamic()
-        
+
         pygame.quit()
 
 
     def flip(self):
-      
+
         pygame.display.flip()
         self.clock.tick(self.fps)
         self.screen.blit(self.background, (0, 0))
-        
+
 
 ####
 
@@ -113,8 +112,8 @@ class Ball(object):
     def max_x(self):
 
         return self.x + self.radius * 2
-    
-        
+
+
     def rel_move(self, dx, dy):
 
         self.x += dx
@@ -126,7 +125,7 @@ class Ball(object):
         if not self.speed_pulse:
             return
 
-        # balls are shrinking first 
+        # balls are shrinking first
         if self.shrinking:
             if self.act_radius > self.width:
                 self.act_radius -= self.speed_pulse
@@ -138,22 +137,22 @@ class Ball(object):
                 self.act_radius += self.speed_pulse
             else:
                 self.shrinking = True
-        
-        
+
+
     def draw(self, view):
         """ Draw on a device with an appropriate interface."""
         if self.speed_pulse:
             color = random_rgb()
         else:
-            color = self.color 
+            color = self.color
         view.set_color(color)
         view.circle(self.x, self.y, self.act_radius, self.width)
-     
+
 ####
 
 def action(balls, width, view):
     """ Return a function for the pygame mainloop."""
-    # balls move to the right first 
+    # balls move to the right first
     right_moving = [True] * len(balls)
 
     def animate_balls():
@@ -169,19 +168,19 @@ def action(balls, width, view):
                     ball.rel_move(-ball.speed_x, 0)
                 else:
                     right_moving[i] = True
-            
-            ball.pulse() 
+
+            ball.pulse()
             ball.draw(view)
 
-    return animate_balls    
-        
+    return animate_balls
+
 ####
 
 def main(width):
     """Simple example with stationary and moving balls.
-    """   
+    """
     view = PygView(width)
-    
+
     view.draw_static()
     # args:  x, y, radius, speed_x, speed_pulse, color, borderwidth
     # borderwidth <= radius !
@@ -201,8 +200,8 @@ def main(width):
     view.run(loopfunc)
 
 ####
-    
+
 if __name__ == '__main__':
 
     main(920)
-    
+
