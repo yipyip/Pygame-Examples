@@ -348,9 +348,9 @@ CONFIG = {'width': 800,
           'backcol': (250, 250, 250),
           'robot_col': (0, 99, 199),
           'goal_col': (255, 0, 0),
-          'fps': 200,     # how often a sample of the simulation is rendered
+          'fps': 200,     # Pygame clock ticks
           'speed': 200,   # the robot's speedfactor
-          'dt': 0.001,   # samples per second
+          'dt': 0.001,    # samples per second
           'ang_step': 8,  # DELTA space
           'ang_eps': 4,   # DELTA space (start orientation)
           'move_step': 4, # screen space
