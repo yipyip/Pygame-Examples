@@ -103,6 +103,7 @@ class PygView(object):
         self.width = conf['width']
         self.height = conf['height']
         self.backcol = conf['backcol']
+        self.act_color = 0, 0, 0
         self.fps = conf['fps']
         self.quit_keys = pyg.K_ESCAPE, pyg.K_q
 
