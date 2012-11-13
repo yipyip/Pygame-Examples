@@ -18,7 +18,7 @@ class Grid(object):
         self.dx = dx
         self.dy = dy
         self.width = width
-        self.height=  height
+        self.height =  height
         self.xoff = xoff
         self.yoff = yoff
 
