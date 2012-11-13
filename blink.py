@@ -12,13 +12,13 @@ import itertools as it
 
 class Grid(object):
     """A Grid Abstraction"""
-    
+
     def __init__(self, dx=1, dy=1, width=1, height=1, xoff=0, yoff=0):
         """dx, dy should be > 0"""
         self.dx = dx
         self.dy = dy
-        self.width= width
-        self.height= height
+        self.width = width
+        self.height=  height
         self.xoff = xoff
         self.yoff = yoff
 
@@ -44,6 +44,7 @@ class Display(object):
         self.width = width
         self.height = height
         self.backcol = backcol
+        self.act_color = 0, 0, 0
         self.fps = fps
         self.quit_keys = pyg.K_ESCAPE, pyg.K_q
 
