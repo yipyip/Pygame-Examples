@@ -6,13 +6,12 @@
 ####
 
 import pygame
-import sys
 import random
 
 ####
 
-WIDTH = 800
-HEIGHT = 600
+WIDTH = 900
+HEIGHT = 700
 CELL_WIDTH = 8
 CELL_HEIGHT = 6
 
@@ -25,7 +24,7 @@ CELL_COLOR = (0, 255, 0)
 ####
 
 def init_pygame(width, height):
-
+    """Pygame stuff."""
     pygame.init()
     clock = pygame.time.Clock()
     screen = pygame.display.set_mode((width, height))
@@ -36,7 +35,7 @@ def init_pygame(width, height):
 ####
 
 def populate_cells(max_x, max_y, ratio=8):
-
+    """Initialize cells at at random."""
     cells = {}
     for y in range(max_y):
         for x in range(max_x):
@@ -51,7 +50,7 @@ def dead_or_alive(old_cells, x, y, new_cells):
            dead cell   => living cell, if exactly 3 neighbors
            living cell => dead cell, if not 2 or 3 neighbors
     """
-    neighbors = sum(old_cells[(MAX_X+x+i)%MAX_X, (MAX_Y+y+j)%MAX_Y] for i, j in OFFSETS)
+    neighbors = sum(old_cells[(x+i) % MAX_X, (y+j) % MAX_Y] for i, j in OFFSETS)
 
     if old_cells[x, y] == 0:
         if neighbors == 3:
@@ -107,5 +106,4 @@ def simulate(screen, clock):
 
 if __name__ == '__main__':
 
-    screen, clock = init_pygame(WIDTH, HEIGHT)
-    simulate(screen, clock)
+    simulate(*init_pygame(WIDTH, HEIGHT))
