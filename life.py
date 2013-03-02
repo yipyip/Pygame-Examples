@@ -35,7 +35,7 @@ def init_pygame(width, height):
 ####
 
 def populate_cells(max_x, max_y, ratio=8):
-    """Initialize cells at at random."""
+    """Initialize cells at random."""
     cells = {}
     for y in range(max_y):
         for x in range(max_x):
@@ -66,9 +66,8 @@ def dead_or_alive(old_cells, x, y, new_cells):
 ####
 
 def simulate(screen, clock):
-    """The main part.
-
-    Check cells in old map and write results in new map.
+    """
+    Check cells in old map and write results to new map.
     """
     old_cells = populate_cells(MAX_X, MAX_Y)
     new_cells = {}
