@@ -379,10 +379,10 @@ CONFIG = {'width': 900,
           'fps': 200,     # Pygame clock ticks
           'speed': 200,   # the robot's speedfactor
           'dt': 0.001,    # samples per second
-          'ang_step': 8,  # DELTA space
-          'ang_eps': 4,   # DELTA space (start orientation)
-          'move_step': 4, # screen space
-          'move_eps': 8}  # screen space (goal proximity)
+          'ang_step': 8,  # DELTA domain
+          'ang_eps': 4,   # DELTA domain (start orientation)
+          'move_step': 4, # screen domain
+          'move_eps': 8}  # screen domain (goal proximity)
 
 ####
 
