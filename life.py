@@ -90,7 +90,7 @@ def simulate(screen, clock):
             for x in range(MAX_X):
                 if old_cells[x, y]:
                     pygame.draw.rect(screen, CELL_COLOR,
-                                     (x * CELL_WIDTH, y*CELL_HEIGHT,
+                                     (x * CELL_WIDTH, y * CELL_HEIGHT,
                                       CELL_WIDTH, CELL_HEIGHT))
                 dead_or_alive(old_cells, x, y, new_cells)
 
