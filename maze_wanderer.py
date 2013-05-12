@@ -1,6 +1,7 @@
 #!/usr/bin/env python
  
-"""A simple maze game in one file"""
+"""A simple Maze Game.
+"""
  
 ####
  

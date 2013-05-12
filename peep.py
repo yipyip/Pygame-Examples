@@ -35,28 +35,29 @@ def offset(len1, len2):
 class PeepDemo(object):
 
 
-    def __init__(self, **opts):
+    def __init__(self, conf):
 
         pygame.init()
-        self.width = opts['width']
-        self.height = opts['height']
-        self.fps = opts['fps']
+        self.width = conf['width']
+        self.height = conf['height']
+        self.fps = conf['fps']
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
         self.clock = pygame.time.Clock()
         pygame.display.set_caption("Move Mouse and Scroll Mouse Wheel")
 
-        self.pic = load_pic(opts['pic'])
+        self.pic = load_pic(conf['pic'])
         self.background = pygame.Surface(self.screen.get_size()).convert()
-        self.background.fill(opts['backcol'])
+        self.background.fill(conf['backcol'])
 
         self.alpha_surface = pygame.Surface(self.screen.get_size(), flags=pygame.SRCALPHA)
-        self.pic_offset = offset(self.width, self.pic.get_width()),\
-                          offset(self.height, self.pic.get_height())
+        wo = offset(self.width, self.pic.get_width())
+        ho = offset(self.height, self.pic.get_height())
+        self.pic_offset = wo, ho                    
 
         # init stuff for circles with alpha value
         self.center = self.width // 2, self.height // 2
         self.max_radius = min(self.width, self.height)
-        self.hole_count = opts['holes']
+        self.hole_count = conf['holes']
         self.calc_centers(self.center, self.center, self.hole_count)
         self.calc_rad_alphas(self.max_radius, self.hole_count)
 
@@ -132,15 +133,15 @@ class PeepDemo(object):
 
 ####
 
-opts = {'width': 800,
-        'height': 600,
-        'backcol': (255, 0, 0),
-        'fps': 100,
-        'fontsize': 18,
-        'pic': 'ente.jpg',
-        'holes': 7}
+CONFIG = {'width': 800,
+          'height': 600,
+          'backcol': (255, 0, 0),
+          'fps': 100,
+          'fontsize': 18,
+          'pic': 'ente.jpg',
+          'holes': 7}
 ####
 
 if __name__ == "__main__":
 
-    PeepDemo(**opts).run()
+    PeepDemo(CONFIG).run()
