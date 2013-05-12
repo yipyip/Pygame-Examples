@@ -4,11 +4,16 @@
 """
  
 ####
- 
+
+from __future__ import print_function
+import sys
 import pygame as pyg
 import random as rand
 import math
- 
+
+if sys.version_info[0] >= 3:
+    xrange = range
+    
 #### configuration 
  
 mapcolors =\
@@ -649,7 +654,7 @@ class MazeGame(object):
          
     def quit(self):
  
-        print "Bye"
+        print("Bye")
  
 ####
          
