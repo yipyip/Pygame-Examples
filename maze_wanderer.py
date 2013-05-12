@@ -261,8 +261,9 @@ class Map(object):
         self.data = map_data
  
  
-    def __getitem__(self, (x, y)):
- 
+    def __getitem__(self, x_y):
+
+        x, y = x_y
         return self.data[y][x]
      
  
