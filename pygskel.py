@@ -11,10 +11,10 @@ import pygame
 ####
 
 class PygView(object):
-    """A Basic Pygame Window""" 
-  
+    """A Basic Pygame Window"""
+
     def __init__(self, width=800, height=600, fps=50, backcol=(0,0,0)):
-        """Standart Initialisation Stuff"""
+        """Standard Initialisation Stuff"""
         pygame.init()
         self.width = width
         self.height = height
@@ -23,31 +23,31 @@ class PygView(object):
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
         pygame.display.set_caption("Press ESC to quit")
 
-        self.background = pygame.Surface(self.screen.get_size()).convert()  
+        self.background = pygame.Surface(self.screen.get_size()).convert()
         self.background.fill(backcol)
-       
+
 
     def run(self):
         """Mainloop"""
         running = True
         while running:
-            self.flip()    
+            self.flip()
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                    running = False 
+                    running = False
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
                         running = False
 
             self.action()
-            
+
         pygame.quit()
 
 
     def action(self):
         pass
 
-        
+
     def flip(self):
         """Using double buffering: Draw to background and blit to foreground."""
         pygame.display.flip()
