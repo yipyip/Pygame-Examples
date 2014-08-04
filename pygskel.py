@@ -2,57 +2,65 @@
 # -*- coding: utf-8 -*-
 
 """
-Code skeleton for Pygame examples."""
+Code skeleton for Pygame examples.
+"""
 
 ####
 
-import pygame
+import pygame as pyg
+import random as rand
+
+####
+
+MAX_LINES = 444
 
 ####
 
 class PygView(object):
-    """A Basic Pygame Window"""
-
-    def __init__(self, width=800, height=600, fps=50, backcol=(0,0,0)):
-        """Standard Initialisation Stuff"""
-        pygame.init()
+    """A Basic Pygame Window.
+    """
+    def __init__(self, width=800, height=600, fps=200):
+        """Standard Initialisation Stuff.
+        """
+        pyg.init()
         self.width = width
         self.height = height
         self.fps = fps
-        self.clock = pygame.time.Clock()
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.DOUBLEBUF)
-        pygame.display.set_caption("Press ESC to quit")
-
-        self.background = pygame.Surface(self.screen.get_size()).convert()
-        self.background.fill(backcol)
+        self.clock = pyg.time.Clock()
+        self.screen = pyg.display.set_mode((self.width, self.height))
+        pyg.display.set_caption("Press ESC to quit")
 
 
     def run(self):
-        """Mainloop"""
+        """Mainloop.
+        """
         running = True
         while running:
-            self.flip()
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+            pyg.display.update()
+            self.screen.fill((0, 0, 0))
+            for event in pyg.event.get():
+                if event.type == pyg.QUIT:
                     running = False
-                elif event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
+                elif event.type == pyg.KEYDOWN:
+                    if event.key == pyg.K_ESCAPE:
                         running = False
 
             self.action()
+            self.clock.tick(self.fps)
 
-        pygame.quit()
+        pyg.quit()
 
 
     def action(self):
-        pass
-
-
-    def flip(self):
-        """Using double buffering: Draw to background and blit to foreground."""
-        pygame.display.flip()
-        self.clock.tick(self.fps)
-        self.screen.blit(self.background, (0, 0))
+        """Draw random lines.
+        """
+        for _ in range(MAX_LINES):
+            r = rand.randint(0, 255)
+            g = rand.randint(0, 255)
+            b = rand.randint(0, 255)
+            start = rand.randint(0, self.width), rand.randint(0, self.height)
+            end = rand.randint(0, self.width), rand.randint(0, self.height)
+            pyg.draw.line(self.screen, (r, g, b), start, end)
 
 ####
 
