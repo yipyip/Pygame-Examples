@@ -12,20 +12,21 @@ import random as rand
 
 ####
 
-MAX_LINES = 444
+MAX_LINES = 555
 
 ####
 
 class PygView(object):
     """A Basic Pygame Window.
     """
-    def __init__(self, width=800, height=600, fps=200):
+    def __init__(self, width=800, height=600, max_lines= 222, fps=200):
         """Standard Initialisation Stuff.
         """
         pyg.init()
         self.width = width
         self.height = height
         self.fps = fps
+        self.max_lines = max_lines
         self.clock = pyg.time.Clock()
         self.screen = pyg.display.set_mode((self.width, self.height))
         pyg.display.set_caption("Press ESC to quit")
@@ -54,7 +55,7 @@ class PygView(object):
     def action(self):
         """Draw random lines.
         """
-        for _ in range(MAX_LINES):
+        for _ in range(self.max_lines):
             r = rand.randint(0, 255)
             g = rand.randint(0, 255)
             b = rand.randint(0, 255)
@@ -66,4 +67,4 @@ class PygView(object):
 
 if __name__ == '__main__':
 
-    PygView().run()
+    PygView(max_lines=MAX_LINES).run()
