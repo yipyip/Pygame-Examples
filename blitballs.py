@@ -1,7 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
-"""Surfaces, blitting and animation."""
+"""Surfaces, blitting and animation.
+"""
 
 ####
 
@@ -66,7 +67,8 @@ class PygView(object):
 
 
     def run(self, draw_dynamic):
-        """The Mainloop"""
+        """The Mainloop.
+        """
         running = True
         while running:
             self.flip()
@@ -121,7 +123,8 @@ class Ball(object):
 
 
     def pulse(self):
-        """Shrink or expand ball."""
+        """Shrink or expand ball.
+        """
         if not self.speed_pulse:
             return
 
@@ -151,7 +154,8 @@ class Ball(object):
 ####
 
 def action(balls, width, view):
-    """ Return a function for the pygame mainloop."""
+    """ Return a function for the pygame mainloop.
+    """
     # balls move to the right first
     right_moving = [True] * len(balls)
 

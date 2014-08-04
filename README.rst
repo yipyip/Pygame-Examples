@@ -1,20 +1,20 @@
 Pygame Examples
 ===============
 
-Some conceptional examples with Pygame, from easy to not so easy. 
+Some conceptional examples with Pygame, from easy to not so easy.
 
 
 Installation
 ------------
 
-Dependencies: 
+Dependencies:
 
-* Python2.6+ (tested with Python 2.6, should work with Python 2.7 too)
+* Python3.3+
 * Pygame
 
 Download and unpack this Repository. Enter ::
- 
-    python <filename>
+
+    python3.3 <filename>
 
 at the top level directory.
 

@@ -1,7 +1,8 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
-"""A Robot orientating and moving towards a goal."""
+"""A Robot orientating and moving towards a goal.
+"""
 
 ####
 
@@ -18,7 +19,8 @@ PI2 = math.pi * 2
 ####
 
 def make_alpha_z(delta=DELTA):
-    """Setup function for converting angle in DELTA space to complex number."""
+    """Setup function for converting angle in DELTA space to complex number.
+    """
     steps = PI2 / delta
 
     def atz(alpha):
@@ -70,13 +72,15 @@ def get_delta_angle(pos, alpha, goal_pos):
 ####
 
 def norm2(x, y):
-    """2D norm"""
+    """2D norm.
+    """
     return math.sqrt(x*x + y*y)
 
 ####
 
 def dirvec2(p0, p1):
-    """Vector from p0 to p1."""
+    """Vector from p0 to p1.
+    """
     vx, vy = p1
     wx, wy = p0
     x = vx - wx
@@ -88,17 +92,18 @@ def dirvec2(p0, p1):
 ####
 
 def distance2(p0, p1):
-    """Normalized direction vector from p0 to p1."""
+    """Normalized direction vector from p0 to p1.
+    """
     return norm2(p1[0] - p0[0], p1[1] - p0[1])
 
 ####
 
 class PygView(object):
-    """Pygame Output"""
-
+    """Pygame output.
+    """
     def __init__(self, controller, conf):
-        """Setup Pygame window."""
-
+        """Setup Pygame window.
+        """
         self.controller = controller
         self.width = conf['width']
         self.height = conf['height']
@@ -115,15 +120,14 @@ class PygView(object):
 
     @property
     def frame_duration_secs(self):
-        """Get frame seconds.
-
-        (get_time() returns milliseconds)
+        """Get frame seconds. (get_time() returns milliseconds.)
         """
         return 0.001 * self.clock.get_time()
 
 
     def run(self):
-        """Mainloop"""
+        """Mainloop.
+        """
         running = True
         while running:
             self.clock.tick_busy_loop(self.fps)
@@ -135,7 +139,7 @@ class PygView(object):
 
 
     def dispatch_events(self):
-        """Check user input
+        """Check user input.
 
         If user quits return False else True.
         """
@@ -173,8 +177,8 @@ class PygView(object):
 ####
 
 class Shape(object):
-    """Drawing Information for a polygonal object."""
-
+    """Drawing Information for a polygonal object.
+    """
     def __init__(self, coords, color):
 
         self.coords = coords
@@ -202,8 +206,8 @@ class Shape(object):
 
 
     def draw(self, device, color=None):
-        """Tranform and draw."""
-
+        """Tranform and draw.
+        """
         # Get complex number as rotation vector
         alpha_z = alpha_to_z(self.alpha)
         # Rotate points which are specified in definition space.
@@ -219,8 +223,8 @@ class Shape(object):
 ####
 
 class Goal(Shape):
-    """An object that transforms to a new location if reached."""
-
+    """An object that transforms to a new location if reached.
+    """
     def __init__(self, coords, conf):
 
         super(Goal, self).__init__(coords, conf['goal_col'])
@@ -234,8 +238,8 @@ class Goal(Shape):
 ####
 
 class Robot(Shape):
-    """The Goal Chaser"""
-
+    """The Goal Chaser.
+    """
     def __init__(self, coords, conf):
 
         super(Robot, self).__init__(coords, conf['robot_col'])
@@ -255,7 +259,8 @@ class Robot(Shape):
 
 
     def orientate(self, dt, goal_pos):
-        """Align robot towards goal in dt steps."""
+        """Align robot towards goal in dt steps.
+        """
         if self.state in ('goal', 'moving'):
             return
 
@@ -274,7 +279,8 @@ class Robot(Shape):
 
 
     def move(self, dt, goal_pos):
-        """Move robot to goal in dt steps."""
+        """Move robot to goal in dt steps.
+        """
         if self.state in ('goal', 'orientating'):
             return
 
@@ -303,18 +309,17 @@ class Robot(Shape):
 ####
 
 class Simulation(object):
-    """Model and Controller as one Class"""
-
+    """Model and Controller as one class.
+    """
     def __init__(self, view, conf):
-        """Setup all stuff."""
-
-
+        """Setup all stuff.
+        """
         self.width = conf['width']
         self.height = conf['height']
         self.view = view(self, conf)
         # use a smaller area to place the goal
-        self.area = map(int, (self.width * 0.1, self.height * 0.1,
-                               self.width * 0.9, self.height * 0.9))
+        self.area = list(map(int, (self.width * 0.1, self.height * 0.1,
+                                   self.width * 0.9, self.height * 0.9)))
 
         self.goal = Goal(((10, 0), (0, 10), (-10, 0), (0, -10)), conf)
         self.robot = Robot(((20, 0), (-20, 20), (0, 0), (-20, -20)), conf)
@@ -324,7 +329,8 @@ class Simulation(object):
 
 
     def process(self):
-        """Making all calculations here."""
+        """Making all calculations here.
+        """
         if self.robot.state == 'goal':
             self.goal.random_trans(*self.area)
             self.robot.reset()
@@ -337,7 +343,8 @@ class Simulation(object):
 
 
     def transform(self, dt, pos):
-        """Calculate robot transformation per dt."""
+        """Calculate robot transformation per dt.
+        """
         self.robot.orientate(dt, pos)
         self.robot.move(dt, pos)
 
@@ -349,16 +356,18 @@ class Simulation(object):
 ####
 
 class IntegrationTimer(object):
-
-
+    """Fix your timestep. ;-)
+    """
     def __init__(self, dt):
-        """Set calculation step per second."""
+        """Set calculation step per second.
+        """
         self.dt = dt
         self.accu = 0.0
 
 
     def __iadd__(self, delta):
-        """Update with elapsed time."""
+        """Update with elapsed time.
+        """
         self.accu += delta
         return self
 

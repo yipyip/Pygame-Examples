@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 """Drawing with alpha values."""
@@ -52,7 +52,7 @@ class PeepDemo(object):
         self.alpha_surface = pygame.Surface(self.screen.get_size(), flags=pygame.SRCALPHA)
         wo = offset(self.width, self.pic.get_width())
         ho = offset(self.height, self.pic.get_height())
-        self.pic_offset = wo, ho                    
+        self.pic_offset = wo, ho
 
         # init stuff for circles with alpha value
         self.center = self.width // 2, self.height // 2
@@ -68,7 +68,7 @@ class PeepDemo(object):
 
         rad_step = radius // n
         alpha_step = 256 // n
-        self.rad_alphas = [(radius - i * rad_step, 255 - i*alpha_step) for i in xrange(n)]
+        self.rad_alphas = [(radius - i * rad_step, 255 - i*alpha_step) for i in range(n)]
 
 
     def calc_centers(self, center, pos, holes):
@@ -80,7 +80,7 @@ class PeepDemo(object):
 
         xs = vx // holes
         ys = vy // holes
-        self.centers = [(cx + xs*i, cy + ys*i) for i in xrange(holes)]
+        self.centers = [(cx + xs*i, cy + ys*i) for i in range(holes)]
 
 
     def run(self):

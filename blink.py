@@ -1,10 +1,12 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
-"""Blinking rectangles."""
+"""Blinking rectangles.
+"""
 
 ####
 
+import sys
 import pygame as pyg
 import itertools as it
 
@@ -14,7 +16,7 @@ class Grid(object):
     """A Grid Abstraction"""
 
     def __init__(self, dx=1, dy=1, width=1, height=1, xoff=0, yoff=0):
-        """dx, dy should be > 0"""
+        # dx, dy should be > 0
         self.dx = dx
         self.dy = dy
         self.width = width
@@ -24,19 +26,21 @@ class Grid(object):
 
 
     def __call__(self, x, y):
-        """Convert grid coordinates to canvas coordinates."""
+        """Convert grid coordinates to canvas coordinates.
+        """
         return self.xoff + x * self.dx, self.yoff + y * self.dy
 
 
     def box(self, x, y):
-        """Return rectangle parameters for pygame."""
+        """Return rectangle parameters for pygame.
+        """
         return self(x, y) + (self.width, self.height)
 
 ####
 
 class Display(object):
-    """Pygame Stuff"""
-
+    """Pygame Stuff.
+    """
     def __init__(self, controller, grid, width, height, backcol=(0, 0, 0), fps=30):
 
         self.controller = controller
@@ -101,8 +105,8 @@ class Display(object):
 ####
 
 class LedColumn(object):
-    """A Column of Rectangles (the LEDs)."""
-
+    """A Column of Rectangles (the LEDs).
+    """
     def __init__(self, colors):
 
         self.colors = colors
@@ -121,13 +125,13 @@ class LedColumn(object):
 ####
 
 class LedMatrix(object):
-    """Coluns and Rows"""
-
+    """Coluns and Rows.
+    """
     def __init__(self, columns, rows, colors):
 
         self.rows = rows
         self.columns = columns
-        self.mat = [LedColumn(colors[row]) for row in xrange(columns)]
+        self.mat = [LedColumn(colors[row]) for row in range(columns)]
         self.act_column = it.cycle(range(columns))
 
 
@@ -143,7 +147,7 @@ class LedMatrix(object):
 
     def draw_column(self, device):
 
-        column = self.act_column.next()
+        column = next(self.act_column)
         for i, (col, state) in enumerate(self[column]):
             if state:
                 device.set_color(col)
@@ -152,8 +156,8 @@ class LedMatrix(object):
 ####
 
 class Controller(object):
-    """The C in MVC"""
-
+    """The C in MVC.
+    """
     def __init__(self, demo, grid, width, height, fps):
 
         self.demo = demo
@@ -172,16 +176,16 @@ class Controller(object):
 ####
 
 class Demo(object):
-    """The Model in MVC"""
-
+    """The Model in MVC.
+    """
     def __init__(self, columns, rows, speed=100, one_column=False):
 
-        colors = [[((0, 255, 0), (255, 0, 0))[(c+r) % 2] for r in xrange(rows)]
-                  for c in xrange(columns)]
+        colors = [[((0, 255, 0), (255, 0, 0))[(c+r) % 2] for r in range(rows)]
+                  for c in range(columns)]
         self.matrix = LedMatrix(columns, rows, colors)
-        self.xs = it.cycle(xrange(columns))
-        self.ys = it.cycle(xrange(rows))
-        self.duration = it.cycle(xrange(max(1, speed)))
+        self.xs = it.cycle(range(columns))
+        self.ys = it.cycle(range(rows))
+        self.duration = it.cycle(range(max(1, speed)))
         self.ax = 0
         self.ay = 0
         self.columns = columns
@@ -190,10 +194,10 @@ class Demo(object):
 
     def animate(self, display):
 
-        if not self.duration.next():
-            self.ax = self.xs.next()
+        if not next(self.duration):
+            self.ax = next(self.xs)
         if not self.ax:
-            self.ay = self.ys.next()
+            self.ay = next(self.ys)
 
         self.matrix.set_led(self.ax, self.ay, 0)
 
