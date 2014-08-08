@@ -1,0 +1,12 @@
+python:
+- "3.2"
+- "3.3"
+- "3.4"
+
+install: true
+
+script: true
+
+branches:
+  only:
+    - master
