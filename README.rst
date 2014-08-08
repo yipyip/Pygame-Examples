@@ -1,3 +1,7 @@
+
+.. image:: https://travis-ci.org/yipyip/Pygame-Examples.svg?branch=master
+    :target: https://travis-ci.org/yipyip/Pygame-Examples
+
 Pygame Examples
 ===============
 
