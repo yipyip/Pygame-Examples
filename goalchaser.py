@@ -12,31 +12,12 @@ import math
 
 ####
 
-DELTA = 2048
-DELTA2 = DELTA // 2
-PI2 = math.pi * 2
+PI = math.pi
+PI2 = math.pi * 2.0
 
 ####
 
-def make_alpha_z(delta=DELTA):
-    """Setup function for converting angle in DELTA space to complex number.
-    """
-    steps = PI2 / delta
-
-    def atz(alpha):
-        """
-        Args:
-            alpha: 0 < alpha < DELTA
-        Returns:
-            Normalized complex number
-        """
-        return complex(math.cos(alpha * steps), math.sin(alpha * steps))
-
-    return atz
-
-####
-
-alpha_to_z = make_alpha_z()
+alpha_to_z = lambda a: complex(math.cos(a), math.sin(a))
 
 ####
 
@@ -64,10 +45,9 @@ def get_delta_angle(pos, alpha, goal_pos):
     # in pi space
     angle = math.atan2(zturn.imag, zturn.real)
     if angle < 0:
-        angle = PI2 + angle
+        angle += PI2
 
-    # in DELTA space
-    return int(DELTA * angle / PI2)
+    return angle
 
 ####
 
@@ -202,7 +182,9 @@ class Shape(object):
 
     def rotate_rel(self, alpha):
 
-        self.alpha = (int(self.alpha + alpha + 0.5)) % DELTA
+        self.alpha += alpha
+        if self.alpha > PI2:
+            self.alpha -=  PI2
 
 
     def draw(self, device, color=None):
@@ -244,13 +226,10 @@ class Robot(Shape):
 
         super(Robot, self).__init__(coords, conf['robot_col'])
         self.state = 'orientating'
-        speed = conf['speed']
-        dt = conf['dt']
-
-        self.ang_step = conf['ang_step'] * speed
-        self.ang_eps = conf['ang_eps'] * (speed * dt + 1)
-        self.move_step = conf['move_step'] * speed
-        self.move_eps = conf['move_eps'] * (speed * dt + 1)
+        self.ang_step = PI2 / conf['pi_step']
+        self.ang_eps = PI2 / conf['pi_eps']
+        self.move_step = conf['move_step']
+        self.move_eps = conf['move_eps']
 
 
     def reset(self):
@@ -267,18 +246,18 @@ class Robot(Shape):
         if self.state == 'orientating':
             ang = get_delta_angle(self.pos, self.alpha, goal_pos)
             ang_eps = self.ang_eps
-            if ang < ang_eps or (DELTA - ang) < ang_eps:
+            if ang < ang_eps or (PI2 - ang) < ang_eps:
                 self.state = 'orientated'
             else:
                 # !!!
-                if ang < DELTA2:
+                if ang < PI:
                     turn = dt * self.ang_step
                 else:
-                    turn = -dt * self.ang_step
+                    turn = PI2 - dt * self.ang_step
                 self.rotate_rel(turn)
 
 
-    def move(self, dt, goal_pos):
+    def translate(self, dt, goal_pos):
         """Move robot to goal in dt steps.
         """
         if self.state in ('goal', 'orientating'):
@@ -300,6 +279,12 @@ class Robot(Shape):
                 self.state = 'orientating'
             else:
                 self.old_distance = dist
+
+
+    def move(self, dt, goal_pos):
+
+        self.orientate(dt, goal_pos)
+        self.translate(dt, goal_pos)
 
 
     def __repr__(self):
@@ -336,17 +321,10 @@ class Simulation(object):
             self.robot.reset()
 
         self.dtimer += self.view.frame_duration_secs
-        self.dtimer.integrate(self.transform, self.goal.pos)
+        self.dtimer.integrate(self.robot.move, self.goal.pos)
         self.goal.draw(self.view)
         self.robot.draw(self.view)
         #print self.robot
-
-
-    def transform(self, dt, pos):
-        """Calculate robot transformation per dt.
-        """
-        self.robot.orientate(dt, pos)
-        self.robot.move(dt, pos)
 
 
     def run(self):
@@ -385,13 +363,12 @@ CONFIG = {'width': 900,
           'backcol': (250, 250, 250),
           'robot_col': (0, 99, 199),
           'goal_col': (255, 0, 0),
-          'fps': 200,     # Pygame clock ticks
-          'speed': 200,   # the robot's speedfactor
-          'dt': 0.001,    # samples per second
-          'ang_step': 8,  # DELTA domain
-          'ang_eps': 4,   # DELTA domain (start orientation)
-          'move_step': 4, # screen domain
-          'move_eps': 8}  # screen domain (goal proximity)
+          'fps': 200,       # Pygame clock ticks
+          'dt': 0.005,      # samples per second
+          'pi_step': 4,     # PI domain: angle = PI * 2 / pi_step
+          'pi_eps': 80,     # PI domain: angle epsilon = PI * 2 / pi_eps
+          'move_step': 400, # screen domain
+          'move_eps': 30}   # screen domain (goal proximity)
 
 ####
 
