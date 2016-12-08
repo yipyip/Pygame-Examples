@@ -51,30 +51,10 @@ def get_delta_angle(pos, alpha, goal_pos):
 
 ####
 
-def norm2(x, y):
-    """2D norm.
-    """
-    return math.sqrt(x*x + y*y)
-
-####
-
-def dirvec2(p0, p1):
-    """Vector from p0 to p1.
-    """
-    vx, vy = p1
-    wx, wy = p0
-    x = vx - wx
-    y = vy - wy
-
-    denom = norm2(x, y)
-    return x / denom, y / denom
-
-####
-
 def distance2(p0, p1):
-    """Normalized direction vector from p0 to p1.
+    """Direction vector from p0 to p1.
     """
-    return norm2(p1[0] - p0[0], p1[1] - p0[1])
+    return math.hypot(p1[0] - p0[0], p1[1] - p0[1])
 
 ####
 
@@ -115,8 +95,8 @@ class PygView(object):
             running = self.dispatch_events()
             self.controller.process()
             self.flip()
-        else:
-            self.quit()
+
+        self.quit()
 
 
     def dispatch_events(self):
@@ -286,6 +266,7 @@ class Robot(Shape):
 
         self.orientate(dt, goal_pos)
         self.translate(dt, goal_pos)
+        #pyg.time.delay(5)
 
 
     def __repr__(self):
@@ -364,12 +345,12 @@ CONFIG = {'width': 900,
           'backcol': (250, 250, 250),
           'robot_col': (0, 99, 199),
           'goal_col': (255, 0, 0),
-          'fps': 200,       # Pygame clock ticks
+          'fps': 200,        # Pygame clock ticks
           'dt': 0.005,       # Time delta in secs
-          'pi_step': 3,     # PI domain: angle = PI * 2 / pi_step
-          'pi_eps': 120,     # PI domain: angle epsilon = PI * 2 / pi_eps
-          'move_step': 400, # screen domain
-          'move_eps': 20}   # screen domain (goal proximity)
+          'pi_step': 2,      # PI domain: angle = PI * 2 / pi_step
+          'pi_eps': 128,     # PI domain: angle epsilon = PI * 2 / pi_eps
+          'move_step': 64,   # screen domain
+          'move_eps': 18}    # screen domain (goal proximity)
 
 ####
 

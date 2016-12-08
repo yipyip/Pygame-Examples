@@ -54,7 +54,8 @@ class PygView(object):
 
         pygame.display.flip()
         self.clock.tick(self.fps)
-        self.screen.blit(self.background, (0, 0))
+        #self.screen.blit(self.background, (0, 0))
+        self.screen.fill((0, 0, 0))
 
 
     def draw_text(self, text):
