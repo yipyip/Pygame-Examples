@@ -25,12 +25,12 @@ def get_delta_angle(pos, alpha, goal_pos):
     """Calculate angle between robot and goal.
 
     Args:
-        pos: Position of robot in window space.
-        alpha: Robot orientation.
-        goal_position: <=
+        pos: Position of robot in window space
+        alpha: Robot orientation
+        goal_pos: position of the goal
 
     Returns:
-       Angle difference in Delta space.
+       Angle difference
     """
 
     alpha_direct = alpha_to_z(alpha)
