@@ -1,5 +1,3 @@
-#!/usr/bin/env python3.3
-
 """A simple Maze Game.
 """
 
@@ -141,9 +139,14 @@ NOT_DRAWABLES = set(('.', 's'))
 class PygView(object):
     """Pygame interface"""
 
-    CURSORKEYS = slice(273, 277)
+    CURSORKEYS = range(273, 277)
     QUIT_KEYS = pyg.K_ESCAPE, pyg.K_q
-    EVENTS = 'up', 'down', 'right', 'left'
+    EVENTS = {pyg.K_UP: 'up',
+              pyg.K_DOWN: 'down',
+              pyg.K_LEFT: 'left',
+              pyg.K_RIGHT: 'right'}
+
+
 
     def __init__(self, controller, config):
         """ Set up Pygame.
@@ -187,8 +190,8 @@ class PygView(object):
         unqueued key events for steering,
         queued key events for common game control."""
 
-        keys = pyg.key.get_pressed()[PygView.CURSORKEYS]
-        move_events = [e for e, k in zip(PygView.EVENTS, keys) if k]
+        keys = pyg.key.get_pressed()
+        move_events = [PygView.EVENTS[k] for k in PygView.EVENTS if keys[k]]
 
         for event in pyg.event.get():
             if event.type == pyg.QUIT:
