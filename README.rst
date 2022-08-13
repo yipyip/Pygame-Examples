@@ -1,7 +1,4 @@
 
-.. image:: https://travis-ci.org/yipyip/Pygame-Examples.svg?branch=master
-    :target: https://travis-ci.org/yipyip/Pygame-Examples
-
 Pygame Examples
 ===============
 
@@ -18,7 +15,7 @@ Dependencies:
 
 Download and unpack this Repository. Enter ::
 
-    python3.3 <filename>
+    python3.<x> <filename>
 
 at the top level directory.
 
