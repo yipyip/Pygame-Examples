@@ -1,4 +1,3 @@
-#!/usr/bin/env python3.3
 # -*- coding: utf-8 -*-
 
 """A Robot orientating and moving towards a goal.
