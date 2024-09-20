@@ -346,9 +346,9 @@ CONFIG = {'width': 900,
           'goal_col': (255, 0, 0),
           'fps': 200,        # Pygame clock ticks
           'dt': 0.005,       # Time delta in secs
-          'pi_step': 1,      # PI domain: angle = PI * 2 / pi_step
+          'pi_step': 2,      # PI domain: angle = PI * 2 / pi_step
           'pi_eps': 32,     # PI domain: angle epsilon = PI * 2 / pi_eps
-          'move_step': 64,   # screen domain
+          'move_step': 128,   # screen domain
           'move_eps': 18}    # screen domain (goal proximity)
 
 ####
