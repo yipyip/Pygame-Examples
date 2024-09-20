@@ -90,7 +90,8 @@ class PygView(object):
         while running:
             pyg.display.set_caption("Press ESC to exit."
                                     "{}{:1.4f}".format(" " * 8, self.frame_duration_secs))
-            self.clock.tick_busy_loop(self.fps)
+            #self.clock.tick_busy_loop(self.fps)
+            self.clock.tick(self.fps)
             running = self.dispatch_events()
             self.controller.process()
             self.flip()
@@ -305,7 +306,6 @@ class Simulation(object):
         self.dtimer.integrate(self.robot.move, self.goal.pos)
         self.goal.draw(self.view)
         self.robot.draw(self.view)
-        #print self.robot
 
 
     def run(self):
@@ -344,10 +344,10 @@ CONFIG = {'width': 900,
           'backcol': (250, 250, 250),
           'robot_col': (0, 99, 199),
           'goal_col': (255, 0, 0),
-          'fps': 200,        # Pygame clock ticks
-          'dt': 0.005,       # Time delta in secs
+          'fps': 400,        # Pygame clock ticks
+          'dt': 0.05,       # Time delta in secs
           'pi_step': 1,      # PI domain: angle = PI * 2 / pi_step
-          'pi_eps': 128,     # PI domain: angle epsilon = PI * 2 / pi_eps
+          'pi_eps': 32,     # PI domain: angle epsilon = PI * 2 / pi_eps
           'move_step': 64,   # screen domain
           'move_eps': 18}    # screen domain (goal proximity)
 

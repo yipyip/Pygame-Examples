@@ -41,7 +41,7 @@ class PygView(object):
         """
         running = True
         while running:
-            pyg.display.update()
+            pyg.display.flip()
             self.screen.fill((0, 0, 0))
             for event in pyg.event.get():
                 if event.type == pyg.QUIT:
